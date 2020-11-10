@@ -242,7 +242,9 @@ void CExercise_StHipyKneeAnkley_FindIndex::Init()
 		knee_q_start[iLeg] = s.legs[iLeg].kneemot.q;
 					
 		joints.legs[iLeg].knee.mMode = SEA_MODE_MOTANGLE;
-		joints.legs[iLeg].knee.motangCtrl.kp = 25;
+		// joints.legs[iLeg].knee.motangCtrl.kp = 25;
+		joints.legs[0].knee.motangCtrl.kp = 25;
+		joints.legs[1].knee.motangCtrl.kp = 2;
 		
 		// store angle ankley at start motion
 		ankley_q_start[iLeg] = s.legs[iLeg].ankleymot.q;
@@ -327,6 +329,8 @@ void CExercise_StHipyKneeAnkley_FindIndex::Update()
 	}
 	
 	joints.Update(&s);
+	logprintf("left_q=%f,right_q=%f,left_qmot=%f,right_qmot=%f,left_torque=%f,right_torque=%f",
+	s.legs[0].knee.q,s.legs[1].knee.q,s.legs[0].kneemot.q,s.legs[1].kneemot.q,s.legs[0].knee.tau,s.legs[1].knee.tau);
 	
 	if (Controller()->TimeElapsed() >= 5.0)
 		Controller()->Transition(&gExercise_StHipyKneeAnkley_FindZeroTorque);

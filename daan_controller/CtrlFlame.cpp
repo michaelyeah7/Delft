@@ -5,6 +5,7 @@
 
 #include "CtrlStanding.h"
 #include "CtrlExercise.h"
+#include "CtrlKneeTest.h"
 #include "CtrlWalking.h"
 #include "hardware_drivers/FlameIO.h"
 
@@ -21,6 +22,7 @@ CFlame_StPowerUpDrivers		gFlame_StPowerUpDrivers;
 CFlame_StPowerDownDrivers	gFlame_StPowerDownDrivers;
 CFlame_StStanding			gFlame_StStanding;
 CFlame_StExercise			gFlame_StExercise;
+CFlame_StKneeTest           gFlame_StKneeTest;
 CFlame_StWalking			gFlame_StWalking;
 
 
@@ -180,10 +182,11 @@ void CFlame_StPowerUpDrivers::Update()
 
 		if ( FLAME_PUSHBUTTON_PRESSED( s.front_panel_sw, PUSHBUTTON1 ))
 		{
-		    logprintf("button was pressed--going into exercises\n");
+		    // logprintf("button was pressed--going into exercises\n");
+			logprintf("button was pressed--going into kneeTest\n");
 			debounce++;	
 			if ( debounce = 5 )
-				Controller()->Transition(&gFlame_StExercise);
+				Controller()->Transition(&gFlame_StKneeTest);
 
 		}
 
@@ -333,6 +336,42 @@ void CFlame_StExercise::Update()
 	else
 		gExerciseController.Update();
 }
+
+void CFlame_StKneeTest::Init()
+{
+	logprintf("entered KneeTest mode.\n");
+
+	// reset the controller state machine
+	gKneeTestController.Init();//Transition(&gExercise_StBegin);
+	s.LEDS |= LED0;
+}
+
+void CFlame_StKneeTest::Update()
+{
+	if (gKneeTestController.IsInState(&gKneeTest_StEnd))
+	{
+	  if ( FLAME_TOGGLE_UP( s.front_panel_sw, TOGGLE2 ) ){
+		  logprintf("Toggle 2 is up, this would normally send us to walking\n");
+		//Controller()->Transition(&gFlame_StWalking);
+		Controller()->Transition(&gFlame_StStanding);
+	  }
+	  else{
+		  logprintf("Toggle 2 is down, starting standing\n");
+			Controller()->Transition(&gFlame_StStanding);
+	  }
+	}
+
+	// power down if the RUN/STOP switch goes to STOP
+	if ( !FLAME_TOGGLE_UP( s.front_panel_sw, TOGGLE0 ) )
+	{
+		s.LEDS &= ~LED0;
+		Controller()->Transition(&gFlame_StPowerDownDrivers);
+	}
+	else
+		gKneeTestController.Update();
+}
+
+
 
 void CFlame_StWalking::Init()
 {

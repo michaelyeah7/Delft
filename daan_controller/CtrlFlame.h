@@ -95,6 +95,14 @@ class CFlame_StExercise : public CStateMachineState
 };
 
 
+class CFlame_StKneeTest : public CStateMachineState
+{
+	public:
+		void	Init();
+		void	Update();
+};
+
+
 class CFlame_StWalking : public CStateMachineState
 {
 	public:
