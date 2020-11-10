@@ -14,10 +14,12 @@ BINARIES =	DMM16AT_test \
 
 INSTALLED_BINARIES=$(BINARIES:%=installed-files/%)
 
-RTAI_INCLUDES = -I/usr/realtime/include
-RTAI_LIBS     = -L/usr/realtime/lib/ -llxrt -lpthread -lm
+RTAI_INCLUDES = -I../../realtime/include
+# /home/qinjielin/Delft/usr
+RTAI_LIBS     = -L../../realtime/lib -llxrt -lpthread -lm
+# RTAI_LIBS     = -L/usr/realtime/lib/ -llxrt -lpthread -lm
 
-INCLUDES     = -I.. ${RTAI_INCLUDES}
+INCLUDES     = -I.. ${RTAI_INCLUDES} -I../../include
 FLAME_LIBS   = -L../real_time_support -L../hardware_drivers -L../utility -lflameio -lrealtime -lutility
 CFLAGS       = -g3 -O2
 
@@ -43,25 +45,25 @@ installed-files:
 # the following require individual entries for special options:
 
 sensor_console: sensor_console.o
-	g++ -o $@ $^ ${FLAME_LIBS} ${RTAI_LIBS} -lncurses
+	g++ -o $@ $^  ${FLAME_LIBS} ${RTAI_LIBS} -lncurses    
 
 UDP_messaging_test: UDP_messaging_test.o ${LIBDEPENDS}
-	g++ -o $@ $< ${FLAME_LIBS}
+	g++ -o $@ $< ${FLAME_LIBS}  
 
 test_saving: test_saving.o ${LIBDEPENDS}
-	g++ -o $@ $< ${FLAME_LIBS}
+	g++ -o $@ $< ${FLAME_LIBS} 
 
 ################################################################
 # default rules
 
 %.o : %.cpp
-	g++ -c $< $(CFLAGS) ${INCLUDES}
+	g++ -c $< $(CFLAGS) ${INCLUDES} 
 
 % : %.o $(LIBDEPENDS)
-	g++ -o $@ $< ${FLAME_LIBS} ${RTAI_LIBS}
+	g++ -o $@ $< ${FLAME_LIBS} ${RTAI_LIBS} 
 
 % : %.cpp $(LIBDEPENDS)
-	g++ -o $@ $< $(CFLAGS) ${INCLUDES} ${FLAME_LIBS} ${RTAI_LIBS}
+	g++ -o $@ $< $(CFLAGS) ${INCLUDES} ${FLAME_LIBS} ${RTAI_LIBS} 
 
 clean:
 	-rm *.o $(BINARIES)

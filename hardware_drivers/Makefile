@@ -6,7 +6,7 @@
 LIBOBJS = DMM16AT.o Mesanet_4I36.o IO_permissions.o AthenaDAQ.o FlameIO.o
 
 ALL = libflameio.a
-CFLAGS = -g3 -O2 -I..
+CFLAGS = -g3 -O2 -I.. -I../../include
 
 default: $(ALL)
 
@@ -14,7 +14,7 @@ libflameio.a: $(LIBOBJS)
 	ar cru $@ $^
 
 #%.o : %.c; $(CC) $(CFLAGS)  -c -o $@ $<
-%.o : %.cpp; g++ $(CFLAGS) -c -o $@ $<
+%.o : %.cpp; g++ $(CFLAGS) -c -o $@ $< 
 
 clean:
 	-rm $(ALL) *.o

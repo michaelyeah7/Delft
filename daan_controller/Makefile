@@ -3,8 +3,8 @@ FILES        =
 
 INSTALLED_FILES=$(BINARIES:%=installed-files/%) $(FILES:%=installed-files/%)
 
-RTAI_INCLUDES = -I/usr/realtime/include
-RTAI_LIBS     = -L/usr/realtime/lib/ -llxrt -lpthread -lm
+RTAI_INCLUDES = -I../../realtime/include -I../../include
+RTAI_LIBS     = -L../../realtime/lib/ -llxrt -lpthread -lm
 
 # uncomment this two variables to enable memory allocation debugging
 # DEBUG_LIBS= -ldmalloc

@@ -11,7 +11,7 @@ default: librealtime.a
 librealtime.a: $(LIBOBJS)
 	ar cru $@ $^
 
-INCLUDES = -I.. -I/usr/realtime/include
+INCLUDES = -I.. -I../../realtime/include/ -I../../include/
 CFLAGS = -g3 -O2 
 
 
@@ -27,7 +27,8 @@ protocol_version.h: messages.h messaging.cpp
 ################################################################
 
 %.o : %.cpp
-	g++ -c $< $(CFLAGS) ${INCLUDES}
+	g++ -c $< $(CFLAGS) ${INCLUDES} 
+#g++ -c $< $(CFLAGS) ${INCLUDES}
 
 clean:
 	-rm *.o librealtime.a

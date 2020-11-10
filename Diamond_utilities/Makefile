@@ -4,8 +4,10 @@ BINARIES     = calibrate_DMM16AT test_DMM16AT test_AthenaDAQ
 
 INSTALLED_BINARIES=$(BINARIES:%=installed-files/%)
 
-INCLUDES     = -I.. -I/usr/local/lib/dscud5
-FLAME_LIBS   = -L/usr/local/lib/dscud5 -ldscud5 -lpthread -lm
+#INCLUDES     = -I.. -I/usr/local/lib/dscud5
+#FLAME_LIBS   = -L/usr/local/lib/dscud5 -ldscud5 -lpthread -lm
+INCLUDES     = -I.. -I../../dscud5
+FLAME_LIBS   = -L../../dscud5 -ldscud5 -lpthread -lm
 CFLAGS       = -g3 -O2
 
 # The default entry builds all the programs
