@@ -1,15 +1,20 @@
 #include "CtrlKneeTest.h"
+#include <iostream>
+#include <fstream>
+using namespace std;
+
 
 CKneeTestController	gKneeTestController;
 CKneeTest_StEnd		gKneeTest_StEnd;
 CKneeTest_StKnee	gKneeTest_StKnee;
 
 
-float 	knee_q_start[2];
+float 	knee_q_start_test[2];
 
-#ifndef max
-#define max(a, b)  (((a) > (b)) ? (a) : (b))
-#endif
+
+// #ifndef max
+// #define max(a, b)  (((a) > (b)) ? (a) : (b))
+// #endif
 
 //****************************************************************/
 // The standing controller
@@ -37,12 +42,16 @@ void CKneeTestController::Init()
 
 void CKneeTest_StKnee::Init()
 {
+    ofstream myfile;
+    myfile.open ("example.txt");
+    myfile << "Writing this to a file.\n";
+    myfile.close();
 	logprintf("Start Knee motion\n");
 		
 		for (int iLeg=0; iLeg<2; iLeg++)
 		{
 			// store angle knee at start motion
-			knee_q_start[iLeg] = s.legs[iLeg].kneemot.q;
+			knee_q_start_test[iLeg] = s.legs[iLeg].kneemot.q;
 			
 			joints.legs[iLeg].knee.mMode = SEA_MODE_MOTANGLE;
 			joints.legs[iLeg].knee.motangCtrl.kp = 25;
@@ -54,15 +63,17 @@ void CKneeTest_StKnee::Init()
 void CKneeTest_StKnee::Update()
 {
 	float knee_maxrefangle = 0.6;
+    ofstream myfile;
+    myfile.open ("example1.txt");
 		
 	if (Controller()->TimeElapsed() <= 1.0)
 	{
-		joints.l().knee.qmot.ref = compute_quintic_spline( Controller()->TimeElapsed(), knee_q_start[0], 0.0, 0.0, knee_maxrefangle, 0.0, 0.0);
-		joints.r().knee.qmot.ref = compute_quintic_spline( Controller()->TimeElapsed(), knee_q_start[1], 0.0, 0.0, knee_maxrefangle, 0.0, 0.0);
+		joints.l().knee.qmot.ref = compute_quintic_spline( Controller()->TimeElapsed(), knee_q_start_test[0], 0.0, 0.0, knee_maxrefangle, 0.0, 0.0);
+		joints.r().knee.qmot.ref = compute_quintic_spline( Controller()->TimeElapsed(), knee_q_start_test[1], 0.0, 0.0, knee_maxrefangle, 0.0, 0.0);
 	}
 		else
 		{
-			if (Controller()->TimeElapsed() <= 2.0)
+			if (Controller()->TimeElapsed() <= 5.0)
 			{
 				joints.l().knee.qmot.ref = compute_quintic_spline( (Controller()->TimeElapsed() - 1.0), knee_maxrefangle, 0.0, 0.0, 0.0, 0.0, 0.0);
 				joints.r().knee.qmot.ref = compute_quintic_spline( (Controller()->TimeElapsed() - 1.0), knee_maxrefangle, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -71,8 +82,10 @@ void CKneeTest_StKnee::Update()
 	
 	joints.Update(&s);
     logprintf("left_q=%f,right_q=%f,left_qmot=%f,right_qmot=%f,left_torque=%f,right_torque=%f",
-	s.legs[0].knee.q,s.legs[1].knee.q,s.legs[0].kneemot.q,s.legs[1].kneemot.q,s.legs[0].knee.tau,s.legs[1].knee.tau);
+	s.legs[0].knee.q, s.legs[1].knee.q,s.legs[0].kneemot.q,s.legs[1].kneemot.q,s.legs[0].knee.tau,s.legs[1].knee.tau);
+    myfile << s.legs[0].knee.q << s.legs[1].knee.q; 
 	
-	if (Controller()->TimeElapsed() >= 2.0)
+	if (Controller()->TimeElapsed() >= 6.0)
+        myfile.close();
 		Controller()->Transition(&gKneeTest_StEnd);
 }

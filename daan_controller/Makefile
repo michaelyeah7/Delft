@@ -34,6 +34,7 @@ CONTROLLER_OBJS = \
 	Flame_core.o \
 	CtrlFlame.o \
 	CtrlExercise.o \
+	CtrlKneeTest.o \
 	CtrlStanding.o \
 	CtrlWalking.o \
 	CtrlJoints.o \
