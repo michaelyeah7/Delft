@@ -42,10 +42,10 @@ void CKneeTestController::Init()
 
 void CKneeTest_StKnee::Init()
 {
-    ofstream myfile;
-    myfile.open ("example.txt");
-    myfile << "Writing this to a file.\n";
-    myfile.close();
+    // ofstream myfile;
+    // myfile.open ("example.txt");
+    // myfile << "Writing this to a file.\n";
+    // myfile.close();
 	logprintf("Start Knee motion\n");
 		
 		for (int iLeg=0; iLeg<2; iLeg++)
@@ -62,11 +62,12 @@ void CKneeTest_StKnee::Init()
 
 void CKneeTest_StKnee::Update()
 {
-	float knee_maxrefangle = -0.6;
+	float knee_maxrefangle = 0.6;
     ofstream myfile;
-    myfile.open ("example1.txt");
-	logprintf("TimeElapsed %f",Controller()->TimeElapsed());
-
+    myfile.open ("kneedebug.txt");
+	logprintf("TimeElapsed %f\n",Controller()->TimeElapsed());
+    // logprintf("knee_q_start_test[0]=%f\n",knee_q_start_test[0]);
+    // logprintf("knee_q_start_test[1]=%f\n",knee_q_start_test[1]);
 	if (Controller()->TimeElapsed() <= 1.0)
 	{
         logprintf("Moving to Max angle\n");
@@ -75,7 +76,7 @@ void CKneeTest_StKnee::Update()
 	}
 		else
 		{
-			if (Controller()->TimeElapsed() <= 5.0)
+			if (Controller()->TimeElapsed() <= 2.0)
 			{
                 logprintf("Moving back to zero angle\n");
 				joints.l().knee.qmot.ref = compute_quintic_spline( (Controller()->TimeElapsed() - 1.0), knee_maxrefangle, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -84,11 +85,15 @@ void CKneeTest_StKnee::Update()
 		}
 	
 	joints.Update(&s);
-    logprintf("left_q=%f,right_q=%f,left_qmot=%f,right_qmot=%f,left_torque=%f,right_torque=%f",
-	s.legs[0].knee.q, s.legs[1].knee.q,s.legs[0].kneemot.q,s.legs[1].kneemot.q,s.legs[0].knee.tau,s.legs[1].knee.tau);
-    myfile << s.legs[0].knee.q << s.legs[1].knee.q; 
-	
-	if (Controller()->TimeElapsed() >= 6.0)
-        myfile.close();
+    logprintf("left_q=%f,right_q=%f,left_qmot_ref=%f,left_qmot=%f,right_qmot_ref=%f,right_qmot=%f,left_torque=%f,right_torque=%f",
+	s.legs[0].knee.q, s.legs[1].knee.q,joints.l().knee.qmot.ref,s.legs[0].kneemot.q,joints.r().knee.qmot.ref,s.legs[1].kneemot.q,s.legs[0].knee.tau,s.legs[1].knee.tau);
+    // myfile << s.legs[0].knee.q <<',' << s.legs[1].knee.q <<',' << joints.l().knee.qmot.ref <<',' << s.legs[0].kneemot.q <<',' << joints.r().knee.qmot.ref <<',' << s.legs[1].kneemot.q <<',' << s.legs[0].knee.tau <<',' << s.legs[1].knee.tau; 
+	myfile << s.legs[0].knee.q;
+    logprintf("new timestep data written");
+    myfile.close();
+	if (Controller()->TimeElapsed() >= 2.0){
+        logprintf("KneeTest completed\n");
+        // myfile.close();
 		Controller()->Transition(&gKneeTest_StEnd);
+    }
 }
