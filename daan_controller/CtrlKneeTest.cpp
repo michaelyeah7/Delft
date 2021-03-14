@@ -10,7 +10,7 @@ CKneeTest_StKnee	gKneeTest_StKnee;
 
 
 float 	knee_q_start_test[2];
-
+// ofstream myfile;
 
 // #ifndef max
 // #define max(a, b)  (((a) > (b)) ? (a) : (b))
@@ -42,7 +42,7 @@ void CKneeTestController::Init()
 
 void CKneeTest_StKnee::Init()
 {
-    // ofstream myfile;
+    
     // myfile.open ("example.txt");
     // myfile << "Writing this to a file.\n";
     // myfile.close();
@@ -63,8 +63,8 @@ void CKneeTest_StKnee::Init()
 void CKneeTest_StKnee::Update()
 {
 	float knee_maxrefangle = 0.6;
-    ofstream myfile;
-    myfile.open ("kneedebug.txt");
+    // ofstream myfile_debug;
+    // myfile_debug.open ("kneedebug.txt");
 	logprintf("TimeElapsed %f\n",Controller()->TimeElapsed());
     // logprintf("knee_q_start_test[0]=%f\n",knee_q_start_test[0]);
     // logprintf("knee_q_start_test[1]=%f\n",knee_q_start_test[1]);
@@ -88,9 +88,9 @@ void CKneeTest_StKnee::Update()
     logprintf("left_q=%f,right_q=%f,left_qmot_ref=%f,left_qmot=%f,right_qmot_ref=%f,right_qmot=%f,left_torque=%f,right_torque=%f",
 	s.legs[0].knee.q, s.legs[1].knee.q,joints.l().knee.qmot.ref,s.legs[0].kneemot.q,joints.r().knee.qmot.ref,s.legs[1].kneemot.q,s.legs[0].knee.tau,s.legs[1].knee.tau);
     // myfile << s.legs[0].knee.q <<',' << s.legs[1].knee.q <<',' << joints.l().knee.qmot.ref <<',' << s.legs[0].kneemot.q <<',' << joints.r().knee.qmot.ref <<',' << s.legs[1].kneemot.q <<',' << s.legs[0].knee.tau <<',' << s.legs[1].knee.tau; 
-	myfile << s.legs[0].knee.q;
-    logprintf("new timestep data written");
-    myfile.close();
+	// myfile << s.legs[0].knee.q;
+    // logprintf("new timestep data written");
+    // myfile_debug.close();
 	if (Controller()->TimeElapsed() >= 2.0){
         logprintf("KneeTest completed\n");
         // myfile.close();

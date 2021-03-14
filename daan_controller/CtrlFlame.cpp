@@ -182,11 +182,12 @@ void CFlame_StPowerUpDrivers::Update()
 
 		if ( FLAME_PUSHBUTTON_PRESSED( s.front_panel_sw, PUSHBUTTON1 ))
 		{
-		    // logprintf("button was pressed--going into exercises\n");
-			logprintf("button was pressed--going into kneeTest\n");
+		    logprintf("button was pressed--going into exercises\n");
+			// logprintf("button was pressed--going into kneeTest\n");
 			debounce++;	
 			if ( debounce = 5 )
-				Controller()->Transition(&gFlame_StKneeTest);
+				Controller()->Transition(&gFlame_StExercise);
+				// Controller()->Transition(&gFlame_StKneeTest);
 
 		}
 

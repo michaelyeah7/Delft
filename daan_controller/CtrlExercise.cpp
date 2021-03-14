@@ -242,9 +242,9 @@ void CExercise_StHipyKneeAnkley_FindIndex::Init()
 		knee_q_start[iLeg] = s.legs[iLeg].kneemot.q;
 					
 		joints.legs[iLeg].knee.mMode = SEA_MODE_MOTANGLE;
-		// joints.legs[iLeg].knee.motangCtrl.kp = 25;
-		joints.legs[0].knee.motangCtrl.kp = 25;
-		joints.legs[1].knee.motangCtrl.kp = 2;
+		joints.legs[iLeg].knee.motangCtrl.kp = 25;
+		// joints.legs[0].knee.motangCtrl.kp = 25;
+		// joints.legs[1].knee.motangCtrl.kp = 2;
 		
 		// store angle ankley at start motion
 		ankley_q_start[iLeg] = s.legs[iLeg].ankleymot.q;
@@ -259,6 +259,8 @@ void CExercise_StHipyKneeAnkley_FindIndex::Init()
 
 void CExercise_StHipyKneeAnkley_FindIndex::Update()
 {
+	// ofstream myfile_debug;
+    // myfile_debug.open ("hipdebug.txt");
 	float hipy_maxrefangle = 0.3;
 	float knee_maxrefangle = 0.9;
 	float ankley_maxrefangle = 0.8;//0.6;
@@ -329,9 +331,18 @@ void CExercise_StHipyKneeAnkley_FindIndex::Update()
 	}
 	
 	joints.Update(&s);
-	logprintf("left_q=%f,right_q=%f,left_qmot=%f,right_qmot=%f,left_torque=%f,right_torque=%f",
+
+	logprintf("left_hip_q=%f,right_hip_q=%f,left_hip_qmot_ref=%f,right_hip_qmot_ref=%f,left_hip_qmot=%f,right_hip_qmot=%f,left_hip_torque=%f,right_hip_torque=%f\n",
+	s.legs[0].hipy.q,s.legs[1].hipy.q,joints.l().hipy.qmot.ref,joints.r().hipy.qmot.ref,s.legs[0].hipymot.q,s.legs[1].hipymot.q,s.legs[0].hipy.tau,s.legs[1].hipy.tau);
+
+	logprintf("left_knee_q=%f,right_knee_q=%f,left_knee_qmot=%f,right_knee_qmot=%f,left_knee_torque=%f,right_knee_torque=%f\n",
 	s.legs[0].knee.q,s.legs[1].knee.q,s.legs[0].kneemot.q,s.legs[1].kneemot.q,s.legs[0].knee.tau,s.legs[1].knee.tau);
-	
+
+    // myfile << joints.l().hipy.qmot.ref,joints.r().hipy.qmot.ref,s.legs[0].hipymot.q,s.legs[1].hipymot.q;
+	// myfile << s.legs[0].knee.q;
+    // logprintf("new timestep data written");
+    // myfile_debug.close();
+
 	if (Controller()->TimeElapsed() >= 5.0)
 		Controller()->Transition(&gExercise_StHipyKneeAnkley_FindZeroTorque);
 }
