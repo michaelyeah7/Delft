@@ -32,6 +32,7 @@ scp -P 2222 -r Delft/ root@127.0.0.1:/root/Delft_ws
 make clean && make && make install
 
 #On a new terminal, run program
+ssh root@127.0.0.1
 ssh root@robot
 run_Flame
 ```
